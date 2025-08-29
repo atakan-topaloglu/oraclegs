@@ -119,8 +119,9 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
             if opt.gt_synth_schedule:
                 # Automatic schedule for GT vs. synthetic sampling
                 progress = iteration / opt.iterations
-                prob_synth = 6 * progress * ((1 - progress)**3)
-                prob_gt = np.clip(1-prob_synth, 0, 1)
+                # prob_synth = 25 * progress**2 * ((1 - progress)**6)
+                prob_gt = 0.9 - progress*((1-progress)**3)
+                prob_gt = np.clip(prob_gt, 0, 1)
 
             else:
                 # Fixed ratio for GT vs. synthetic sampling
