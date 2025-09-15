@@ -202,7 +202,7 @@ def readColmapSceneInfo(path, images, depths, eval, llffhold=8, init_type="sfm",
     depth_params_file = os.path.join(sparse_path, "depth_params.json")
 
 
-
+    synthetic_dir = ""
     if num_train_views != -1:
         potential_dir = os.path.join(path, f"synthetic_{num_train_views}")
         if os.path.isdir(potential_dir):
@@ -481,7 +481,9 @@ def readNerfSyntheticInfo(path, white_background, depths, eval, num_train_views=
             synthetic_dir = potential_dir
             print(f"Selected synthetic directory based on num_train_views: {synthetic_dir}")
 
+    
     # Fallback to finding any synthetic directory if specific one isn't found or num_train_views is not set
+    synthetic_dir = ""
     if not synthetic_dir:
         synth_dirs = [d for d in glob.glob(os.path.join(path, "synthetic_*")) if re.fullmatch(r'synthetic_\d+', os.path.basename(d))]
         if synth_dirs:

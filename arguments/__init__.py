@@ -64,11 +64,14 @@ class ModelParams(ParamGroup):
         super().__init__(parser, "Loading Parameters", sentinel)
 
     def extract(self, args):
-        g = super().extract(args)
-        if not hasattr(g, 'train_on_test_synth'): # This is a hack to avoid the error when the argument is not provided, remove this if you want to see the error
-            g.train_on_test_synth = self.train_on_test_synth
-        g.source_path = os.path.abspath(g.source_path)
-        return g
+        group = GroupParams()
+        for key, value in vars(self).items():
+            attr_name = key[1:] if key.startswith("_") else key
+            if hasattr(args, attr_name):
+                setattr(group, attr_name, getattr(args, attr_name))
+            else:
+                setattr(group, attr_name, value)
+        return group
 
 class PipelineParams(ParamGroup):
     def __init__(self, parser):
