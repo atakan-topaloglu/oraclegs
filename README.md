@@ -44,6 +44,14 @@ This repository is based on the original paper from [3D Gaussian Splatting as Ma
   --num_inputs 12 --cfg 3.0 --L_short 576 --use_traj_prior True --traj_prior orbit \
   --chunking_strategy nearest-gt --output_dir {output_dir} --T 80
  ```
+6. **Compute Confidence Maps**
+
+Use [VGGT](https://github.com/facebookresearch/vggt) Global Attention Maps to proxy per-patch uncertainty using [VGGT_aten](https://github.com/atakan-topaloglu/vggt_aten). \
+In VGGT_aten, run the following command, using the image directory with combşned GT and synthetic views as the `--image_dir` argument:
+
+```python
+python visualize_attn.py --image_dir {image_dir} --output_dir {output_dir} 
+```
 
 ## How to run
 Running code is similar to the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting) with the following differences. You may specify:
