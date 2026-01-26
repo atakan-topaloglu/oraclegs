@@ -1,118 +1,55 @@
-# ** NeurIPS 2024 SPOTLIGHT **
-# 3D Gaussian Splatting as Markov Chain Monte Carlo
+# OracleGS [WACV 2026 Oral] Code Release
 
-[![button](https://img.shields.io/badge/Project%20Website-orange?style=for-the-badge)](https://ubc-vision.github.io/3dgs-mcmc/)
-[![button](https://img.shields.io/badge/Paper-blue?style=for-the-badge)](https://arxiv.org/abs/2404.09591)
-[![button](https://img.shields.io/badge/Video-green?style=for-the-badge)](https://neurips.cc/virtual/2024/poster/94984)
-
-<span class="author-block">
-  <a href="https://shakibakh.github.io/">Shakiba Kheradmand</a>,
-</span>
-<span class="author-block">
-  <a href="http://drebain.com/"> Daniel Rebain</a>,
-</span>
-<span class="author-block">
-  <a href="https://hippogriff.github.io/"> Gopal Sharma</a>,
-</span>
-<span class="author-block">
-  <a href="https://wsunid.github.io/"> Weiwei Sun</a>,
-</span>
-<span class="author-block">
-  <a href="https://scholar.google.com/citations?user=1iJfq7YAAAAJ&hl=en"> Yang-Che Tseng</a>,
-</span>
-<span class="author-block">
-  <a href="http://www.hossamisack.com/">Hossam Isack</a>,
-</span>
-<span class="author-block">
-  <a href="https://abhishekkar.info/">Abhishek Kar</a>,
-</span>
-<span class="author-block">
-  <a href="https://taiya.github.io/">Andrea Tagliasacchi</a>,
-</span>
-<span class="author-block">
-  <a href="https://www.cs.ubc.ca/~kmyi/">Kwang Moo Yi</a>
-</span>
-
-<hr>
-
-<video controls>
-  <source src="docs/resources/training_rand_compare/bicycle_both-rand.mp4" type="video/mp4">
-</video>
-
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@inproceedings{kheradmand20243d,
-    title = {3D Gaussian Splatting as Markov Chain Monte Carlo},
-    author = {Kheradmand, Shakiba and Rebain, Daniel and Sharma, Gopal and Sun, Weiwei and Tseng, Yang-Che and Isack, Hossam and Kar, Abhishek and Tagliasacchi, Andrea and Yi, Kwang Moo},
-    booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
-    year = {2024},
-    note = {Spotlight Presentation},
-   }</code></pre>
-  </div>
-</section>
-
-
-## Updates
-### Dec. 5th, 2024
-A new change has been pushed to diff-gaussian-rasterization. In order to pull it:
-```sh
-cd submodules/diff-gaussian-rasterization
-git pull origin gs-mcmc
-cd ../..
-pip install submodules/diff-gaussian-rasterization
-```
-
-This change incorporates "Section B.2 Tighter Bounding of 2D Gaussians" from [StopThePop](https://arxiv.org/abs/2402.00525) paper. This bound allows to fit a tighter bound around Gaussians when opacity is less than 1.
+This repository is based on the original paper from [3D Gaussian Splatting as Markov Chain Monte Carlo](https://github.com/ubc-vision/3dgs-mcmc), which is built on top of the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting)
 
 ## How to Install
-
-This project is built on top of the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting) and has been tested only on Ubuntu 20.04. If you encounter any issues, please refer to the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting) for installation instructions.
 
 ### Installation Steps
 
 1. **Clone the Repository:**
    ```sh
-   git clone --recursive https://github.com/ubc-vision/3dgs-mcmc.git
+   git clone --recursive https://github.com/atakan-topaloglu/diff-gaussian-rasterization.git
    cd 3dgs-mcmc
    ```
 2. **Set Up the Conda Environment:**
     ```sh
-    conda create -y -n 3dgs-mcmc-env python=3.8
-    conda activate 3dgs-mcmc-env
+    conda create -y -n 3dgs-mcmc python=3.8
+    conda activate 3dgs-mcmc
     ```
 3. **Install Dependencies:**
     ```sh
-    pip install plyfile tqdm torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
+    pip install plyfile tqdm lpips torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
     conda install cudatoolkit-dev=11.7 -c conda-forge
     ```
 4. **Install Submodules:**
     ```sh
-    CUDA_HOME=PATH/TO/CONDA/envs/3dgs-mcmc-env/pkgs/cuda-toolkit/ pip install submodules/diff-gaussian-rasterization submodules/simple-knn/
+    pip install submodules/diff-gaussian-rasterization
+    pip install submodules/simple-knn
     ```
-### Common Issues:
-1. **Access Error During Cloning:**
-If you encounter an access error when cloning the repository, ensure you have your SSH key set up correctly. Alternatively, you can clone using HTTPS.
-2. **Running diff-gaussian-rasterization Fails:**
-You may need to change the compiler options in the setup.py file to run both the original and this code. Update the setup.py with the following extra_compile_args:
-    ```sh
-    extra_compile_args={"nvcc": ["-Xcompiler", "-fno-gnu-unique", "-I" + os.path.join(os.path.dirname(os.path.abspath(__file__)), "third_party/glm/")]}
-    ```
-    Afterwards, you need to reinstall diff-gaussian-rasterization. This is mentioned in [3DGS-issue-#41](https://github.com/graphdeco-inria/gaussian-splatting/issues/41).
-    
-By following these steps, you should be able to install the project and reproduce the results. If you encounter any issues, refer to the original 3DGS code base for further guidance.
+
+5. **Generate Synthetic Images:**
+- Use [Stable Virtual Camera](https://github.com/Stability-AI/stable-virtual-camera) to generate images. Throughout the experiments, we used `CFG=3.0`, `T=80`, `L_short=80`. An example training command is: 
+```python
+python demo.py --data_path /home/mipnerf_360 --task img2img  --data_items bicycle,bonsai,garden,stump,room,counter,kitchen
+ --num_inputs 12 --cfg 3.0 --L_short 576 --use_traj_prior True --traj_prior orbit --chunking_strategy nearest-gt --output_dir {output_dir} --T 80
+ ```
 
 ## How to run
-Running code is similar to the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting) with the following differences:
-- You need to specify the maximum number of Gaussians that will be used. This is performed using --cap_max argument. The results in the paper uses the final number of Gaussians reached by the original 3DGS run for each shape.
-- You need to specify the scale regularizer coefficient. This is performed using --scale_reg argument. For all the experiments in the paper, we use 0.01.
-- You need to specify the opacity regularizer coefficient. This is performed using --opacity_reg argument. For Deep Blending dataset, we use 0.001. For all other experiments in the paper, we use 0.01.
-- You need to specify the noise learning rate. This is performed using --noise_lr argument. For all the experiments in the paper, we use 5e5.
-- You need to specify the initialization type. This is performed using --init_type argument. Options are random (to initialize randomly) or sfm (to initialize using a pointcloud).
+Running code is similar to the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting) with the following differences. You may specify:
+- Maximum number of Gaussians that will be used. This is performed using --cap_max argument. The results in the paper uses the final number of Gaussians reached by the original 3DGS run for each shape.
+- Scale regularizer coefficient. This is performed using --scale_reg argument. For all the experiments in the paper, we use 0.01.
+- Opacity regularizer coefficient. This is performed using --opacity_reg argument. For Deep Blending dataset, we use 0.001. For all other experiments in the paper, we use 0.01.
+- Noise learning rate. This is performed using --noise_lr argument. For all the experiments in the paper, we use 5e5.
+- Input image downsampling rate, we follow the common guidelines for evaluation (-r 4 for Mip-NeRF360 and -r 2 for Synthetic NeRF)
+- Initialization type. This is performed using --init_type argument. Options are random (to initialize randomly) or sfm (to initialize using a pointcloud).
+- If Progressive Augmentation Strategy is going to be used with --gt_synth_schedule and --gt_synth_ratio arguments.
+- LPIPS loss coefficient with the --lambda_lpips argument
+- Path to depth maps for the GT and synthetic images, with the --depths argument. More details about depth map generation can be accessed on [Depth Regularization](https://github.com/graphdeco-inria/gaussian-splatting?tab=readme-ov-file#depth-regularization) section of original 3DGS Repository.
+- Number of GT training views used in --num_train_views argument.
 
-## How to Reproduce the Results in the Paper
-```sh
-python train.py --source_path PATH/TO/Shape --config configs/shape.json --eval
+## Example Training Run to Reproduce Results in Paper
+```python
+python train.py -s {path_to_shape} -m {output_dir} --eval --cap_max 1800000  --scale_reg 0.01 --opacity_reg 0.01 -r 4 --init_type sfm --gt_synth_schedule --gt_synth_ratio 1 --lambda_lpips 0.3 --synth_attention_dir --depths depths --num_train_views 12 
 ```
 
 
