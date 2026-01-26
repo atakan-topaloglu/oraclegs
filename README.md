@@ -1,4 +1,11 @@
-# OracleGS [WACV 2026 Oral] Code Release
+
+<div align="center">
+<h1>OracleGS: Grounding Generative Priors for Sparse-View Gaussian Splatting</h1>
+
+<a href="https://arxiv.org/abs/2509.23258"><img src="https://img.shields.io/badge/arXiv-2509.23258-b31b1b" alt="arXiv"></a>
+<a href="https://atakan-topaloglu.github.io/oraclegs/"><img src="https://img.shields.io/badge/Project_Page-green" alt="Project Page"></a>
+
+[Atakan Topaloğlu](https://atakan-topaloglu.github.io/), [Kunyi Li](https://scholar.google.com/citations?user=-pXMp80AAAAJ&hl=en), [Michael Niemeyer](https://m-niemeyer.github.io/), [Nassir Navab](https://mcml.ai/research/groups/navab/), [A. Murat Tekalp](https://scholar.google.com/citations?user=GzwcDjUAAAAJ&hl=en), [Federico Tombari](https://federicotombari.github.io/)
 
 This repository is based on the original paper from [3D Gaussian Splatting as Markov Chain Monte Carlo](https://github.com/ubc-vision/3dgs-mcmc), which is built on top of the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting)
 
@@ -8,8 +15,8 @@ This repository is based on the original paper from [3D Gaussian Splatting as Ma
 
 1. **Clone the Repository:**
    ```sh
-   git clone --recursive https://github.com/atakan-topaloglu/diff-gaussian-rasterization.git
-   cd 3dgs-mcmc
+   git clone --recursive https://github.com/atakan-topaloglu/OracleGS
+   cd OracleGS
    ```
 2. **Set Up the Conda Environment:**
     ```sh
