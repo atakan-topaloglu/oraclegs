@@ -1,11 +1,13 @@
 
 <div align="center">
-<h1>OracleGS: Grounding Generative Priors for Sparse-View Gaussian Splatting</h1>
+<h1>OracleGS: Grounding Generative Priors for Sparse-View Gaussian Splatting (WACV'26 Oral🎉)</h1>
 
 <a href="https://arxiv.org/abs/2509.23258"><img src="https://img.shields.io/badge/arXiv-2509.23258-b31b1b" alt="arXiv"></a>
 <a href="https://atakan-topaloglu.github.io/oraclegs/"><img src="https://img.shields.io/badge/Project_Page-green" alt="Project Page"></a>
 
 [Atakan Topaloğlu](https://atakan-topaloglu.github.io/), [Kunyi Li](https://scholar.google.com/citations?user=-pXMp80AAAAJ&hl=en), [Michael Niemeyer](https://m-niemeyer.github.io/), [Nassir Navab](https://mcml.ai/research/groups/navab/), [A. Murat Tekalp](https://scholar.google.com/citations?user=GzwcDjUAAAAJ&hl=en), [Federico Tombari](https://federicotombari.github.io/)
+
+</div>
 
 This repository is based on the original paper from [3D Gaussian Splatting as Markov Chain Monte Carlo](https://github.com/ubc-vision/3dgs-mcmc), which is built on top of the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting)
 
@@ -25,7 +27,7 @@ This repository is based on the original paper from [3D Gaussian Splatting as Ma
     ```
 3. **Install Dependencies:**
     ```sh
-    pip install plyfile tqdm lpips torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
+    pip install plyfile tqdm lpips torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117 \
     conda install cudatoolkit-dev=11.7 -c conda-forge
     ```
 4. **Install Submodules:**
@@ -33,12 +35,14 @@ This repository is based on the original paper from [3D Gaussian Splatting as Ma
     pip install submodules/diff-gaussian-rasterization
     pip install submodules/simple-knn
     ```
+    Please ensure that the following is the remote source for [diff-gaussian-rasterization]( https://github.com/atakan-topaloglu/diff-gaussian-rasterization.git) as it contains the modified CUDA rasterizer for with inverse depth loss compatible with 3DGS-MCMC.
 
 5. **Generate Synthetic Images:**
 - Use [Stable Virtual Camera](https://github.com/Stability-AI/stable-virtual-camera) to generate images. Throughout the experiments, we used `CFG=3.0`, `T=80`, `L_short=80`. An example training command is: 
 ```python
-python demo.py --data_path /home/mipnerf_360 --task img2img  --data_items bicycle,bonsai,garden,stump,room,counter,kitchen
- --num_inputs 12 --cfg 3.0 --L_short 576 --use_traj_prior True --traj_prior orbit --chunking_strategy nearest-gt --output_dir {output_dir} --T 80
+  python demo.py --data_path /home/mipnerf_360 --task img2img  --data_items bicycle,bonsai,garden,stump,room,counter,kitchen \
+  --num_inputs 12 --cfg 3.0 --L_short 576 --use_traj_prior True --traj_prior orbit \
+  --chunking_strategy nearest-gt --output_dir {output_dir} --T 80
  ```
 
 ## How to run
@@ -56,7 +60,11 @@ Running code is similar to the [Original 3DGS code base](https://github.com/grap
 
 ## Example Training Run to Reproduce Results in Paper
 ```python
-python train.py -s {path_to_shape} -m {output_dir} --eval --cap_max 1800000  --scale_reg 0.01 --opacity_reg 0.01 -r 4 --init_type sfm --gt_synth_schedule --gt_synth_ratio 1 --lambda_lpips 0.3 --synth_attention_dir --depths depths --num_train_views 12 
+python train.py -s {path_to_shape} -m {output_dir} --eval \
+    --cap_max 1800000 --scale_reg 0.01 --opacity_reg 0.01 -r 4 \
+    --init_type sfm --gt_synth_schedule --gt_synth_ratio 1 \
+    --lambda_lpips 0.3 --synth_attention_dir --depths depths \
+    --num_train_views 12
 ```
 
 
