@@ -35,26 +35,27 @@ This repository is based on the original paper from [3D Gaussian Splatting as Ma
     pip install submodules/diff-gaussian-rasterization
     pip install submodules/simple-knn
     ```
-    Please ensure that the following is the remote source for [diff-gaussian-rasterization]( https://github.com/atakan-topaloglu/diff-gaussian-rasterization.git) as it contains the modified CUDA rasterizer for with inverse depth loss compatible with 3DGS-MCMC.
+    Please ensure that the following is the remote source for [diff-gaussian-rasterization](https://github.com/atakan-topaloglu/diff-gaussian-rasterization/tree/296f0d9c547ab038ba9e4838215cb92c16f7cbaf) as it contains the modified CUDA rasterizer for with inverse depth loss compatible with 3DGS-MCMC.
 
 5. **Generate Synthetic Images:**
-- Use [Stable Virtual Camera](https://github.com/Stability-AI/stable-virtual-camera) to generate images. Throughout the experiments, we used `CFG=3.0`, `T=80`, `L_short=80`. An example training command is: 
-```python
-  python demo.py --data_path /home/mipnerf_360 --task img2img  --data_items bicycle,bonsai,garden,stump,room,counter,kitchen \
-  --num_inputs 12 --cfg 3.0 --L_short 576 --use_traj_prior True --traj_prior orbit \
-  --chunking_strategy nearest-gt --output_dir {output_dir} --T 80
- ```
+ Use [Stable Virtual Camera](https://github.com/Stability-AI/stable-virtual-camera) to generate images. Throughout the experiments, we used `CFG=3.0`, `T=80`, `L_short=80`. An example training command is: 
+    ```sh
+    python demo.py --data_path /home/mipnerf_360 --task img2img  --data_items bicycle,bonsai,garden,stump,room,counter,kitchen \
+    --num_inputs 12 --cfg 3.0 --L_short 576 --use_traj_prior True --traj_prior orbit \
+    --chunking_strategy nearest-gt --output_dir {output_dir} --T 80
+    ```
+
 6. **Compute Confidence Maps**
 
-Use [VGGT](https://github.com/facebookresearch/vggt) Global Attention Maps to proxy per-patch uncertainty using [VGGT_aten](https://github.com/atakan-topaloglu/vggt_aten). \
-In VGGT_aten, run the following command, using the image directory with combşned GT and synthetic views as the `--image_dir` argument:
+    Use [VGGT](https://github.com/facebookresearch/vggt) Global Attention Maps to proxy per-patch uncertainty using [VGGT_aten](https://github.com/atakan-topaloglu/vggt_aten). \
+    In VGGT_aten, run the following command, using the image directory with combşned GT and synthetic views as the `--image_dir` argument:
 
-```python
-python visualize_attn.py --image_dir {image_dir} --output_dir {output_dir} 
-```
+    ```sh
+    python visualize_attn.py --image_dir {image_dir} --output_dir {output_dir} 
+    ```
 
 ## How to run
-Running code is similar to the [Original 3DGS code base](https://github.com/graphdeco-inria/gaussian-splatting) with the following differences. You may specify:
+Running code is similar to the [Original 3DGS codebase](https://github.com/graphdeco-inria/gaussian-splatting) with the following differences. You may specify:
 - Maximum number of Gaussians that will be used. This is performed using --cap_max argument. The results in the paper uses the final number of Gaussians reached by the original 3DGS run for each shape.
 - Scale regularizer coefficient. This is performed using --scale_reg argument. For all the experiments in the paper, we use 0.01.
 - Opacity regularizer coefficient. This is performed using --opacity_reg argument. For Deep Blending dataset, we use 0.001. For all other experiments in the paper, we use 0.01.
