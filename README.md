@@ -45,7 +45,7 @@ This repository is based on the original paper from [3D Gaussian Splatting as Ma
     --chunking_strategy nearest-gt --output_dir {output_dir} --T 80
     ```
 
-6. **Compute Confidence Maps**
+6. **Compute Uncertainty Maps**
 
     Use [VGGT](https://github.com/facebookresearch/vggt) Global Attention Maps to proxy per-patch uncertainty using [VGGT_aten](https://github.com/atakan-topaloglu/vggt_aten). \
     In VGGT_aten, run the following command, using the image directory with combşned GT and synthetic views as the `--image_dir` argument:
